@@ -2,20 +2,67 @@ package com.example.springbootlecture.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 
-//@RequiredArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "movie")
 @Getter
-@Setter
+@NoArgsConstructor
 public class Movie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private  long id;
-    private  String name;
-    private  Integer productionYear;
-    private LocalDateTime createAt;
+    @Column(name = "name")
+    private String name;
 
+    @Column(name = "production_year")
+    private int productionYear;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "director_id")
+    private Director director;
+
+    @OneToMany(
+            mappedBy = "movie",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Actor> actors;
+
+    public Movie(String name, int productionYear) {
+        this.name = name;
+        this.productionYear = productionYear;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
+    }
 }
+

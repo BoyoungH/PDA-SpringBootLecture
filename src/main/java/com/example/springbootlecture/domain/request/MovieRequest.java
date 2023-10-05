@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public class MovieRequest {
-
-    private  String name;
-    private  Integer productionYear;
-
+    private final String name;
+    private final int productionYear;
+    private final Long directorId;
 }
